@@ -1,16 +1,33 @@
 import React, { useState, useEffect } from "react";
 
-const ChallengeFriend = ({fetchUserData, userData}) => {
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const ChallengeFriend = () => {
     const [imageBlob, setImageBlob] = useState(null);
+    const [userData, setUserData] = useState({
+        username: "...",
+        total_correct_questions: 0,
+        total_games_played: 0,
+    });
 
     useEffect(() => {
         fetchUserData();
-        generateInviteImage(userData);
     }, []);
 
+    const fetchUserData = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/get_user_info`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+            const data = await response.json();
+            generateInviteImage(data);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
     const generateInviteImage = async (data) => {
-        console.log(data);
-        const canvas = document.createElement("canvas");
+         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const width = 600;
         const height = 400;

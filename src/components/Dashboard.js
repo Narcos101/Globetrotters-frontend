@@ -32,8 +32,8 @@ function Dashboard() {
             const response = await fetch(`${API_BASE_URL}/api/get_user_info`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
-            const data = await response.json();
-            setUserData(data);
+            const r_data = await response.json();
+            setUserData(r_data);
         } catch (error) {
             console.error("Error fetching user data:", error);
         }
@@ -135,7 +135,7 @@ function Dashboard() {
                         Start the game
                     </button>
                     <br></br>
-                    <ChallengeFriend fetchUserData={()=>fetchUserData} userData={userData} />
+                    <ChallengeFriend />
                 </>
             ) : loading ? (
                 <p className="loading-text">Loading question...</p>
