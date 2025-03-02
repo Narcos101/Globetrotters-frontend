@@ -3,6 +3,8 @@ import Confetti from "react-confetti";
 import ChallengeFriend from "./ChallengeFriend"; // Import the component
 import './Dashboard.css'
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 function Dashboard() {
     const [sessionId, setSessionId] = useState(null);
     const [questionData, setQuestionData] = useState(null);
@@ -11,14 +13,13 @@ function Dashboard() {
     const [result, setResult] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [userData, setUserData] = useState({
-        username: "Guest",
+        username: "...",
         total_correct_questions: 0,
         total_games_played: 0,
     });
 
-    //   const { width, height } = useWindowSize(); 
-
     useEffect(() => {
+        fetchUserData();
         const storedSession = localStorage.getItem("sessionId");
         if (storedSession) {
             setSessionId(storedSession);
@@ -28,7 +29,7 @@ function Dashboard() {
 
     const fetchUserData = async () => {
         try {
-            const response = await fetch('/api/get_user_info', {
+            const response = await fetch(`${API_BASE_URL}/api/get_user_info`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             const data = await response.json();
@@ -38,12 +39,17 @@ function Dashboard() {
         }
     };
 
+    const handle_exit_game = async () => {
+        localStorage.removeItem("sessionId");
+        window.location.reload();
+    };
+    
+
     const handle_start_game = async () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token"); // Get JWT token from storage
-            console.log(token)
-            const response = await fetch("http://127.0.0.1:5000/start_session", {
+            const response = await fetch(`${API_BASE_URL}/start_session`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -57,7 +63,6 @@ function Dashboard() {
                 localStorage.setItem("sessionId", data.session_id);
                 setSessionId(data.session_id);
                 fetchQuestion(data.session_id);
-                console.log("Game session started:", data.session_id);
             } else {
                 console.error("Error:", data.error || "Failed to start session");
             }
@@ -74,7 +79,7 @@ function Dashboard() {
         setResult(null);
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`http://localhost:5000/api/get_round?session_id=${session_id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/get_round?session_id=${session_id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -99,8 +104,7 @@ function Dashboard() {
         try {
             const token = localStorage.getItem("token");
             const sessionId = localStorage.getItem("sessionId");
-            // console.log(token,sessionId,uuid)
-            const response = await fetch("http://localhost:5000/api/set_round", {
+            const response = await fetch(`${API_BASE_URL}/api/set_round`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -114,9 +118,9 @@ function Dashboard() {
             });
 
             const data = await response.json();
-            setResult(data)
-            setShowNextButton(true)
-            setShowResult(true)
+            setResult(data);    
+            setShowNextButton(true);
+            setShowResult(true);
         } catch (error) {
             console.error("Network error:", error);
         }
@@ -124,19 +128,23 @@ function Dashboard() {
 
     return (
         <div className="dashboard-container">
-            <h2>Welcome, {userData?.username}</h2>
+            <h2>Welcome, {userData?.username} !</h2>
             {!sessionId ? (
                 <>
                     <button className="start-game-btn" onClick={handle_start_game}>
                         Start the game
                     </button>
                     <br></br>
-                    <ChallengeFriend fetchUserData={fetchUserData} userData={userData} />
+                    <ChallengeFriend fetchUserData={()=>fetchUserData} userData={userData} />
                 </>
             ) : loading ? (
                 <p className="loading-text">Loading question...</p>
             ) : questionData ? (
                 <div className="question-container">
+                                <button className="exit-game-btn" onClick={handle_exit_game}>
+                Exit
+            </button>
+                    Clues for you: 
                     <ul style={{ listStyleType: "none", padding: 0 }}>
                         {questionData.answer_destination.map((clue, index) => (
                             <li key={index} style={{ marginBottom: "5px" }}>
@@ -157,7 +165,7 @@ function Dashboard() {
                     </ul>
                 </div>
             ) : (
-                <p>No question available.</p>
+                <p>Searching for questions...</p>
             )}
 
 
@@ -174,6 +182,7 @@ function Dashboard() {
                     ) : (
                         <h2 className="incorrect-answer">😞 Incorrect Answer! 😞</h2>
                     )}
+                    Here are some interesting facts about {result.updated_round.correctOption}...
                     <ul style={{ listStyleType: "none", padding: 0 }}>
                         {result.additional_details.map((detail, index) => (
                             <li key={index} style={{ marginBottom: "5px" }}>

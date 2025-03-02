@@ -13,20 +13,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+
 const theme = createTheme();
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 export default function SignUp() {
 
@@ -35,10 +27,9 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     const handleRegister = async () => {
-        console.log(username,password)
         try {
           
-          await axios.post("http://localhost:5000/register", { username, password });
+          await axios.post(`${API_BASE_URL}/register`, { username, password });
           alert("Registration successful! Please login.");
           navigate("/");
         } catch (error) {
@@ -108,9 +99,6 @@ export default function SignUp() {
               </Grid>
             </Grid>
           </Box>
-        </Box>
-        <Box mt={5}>
-          <Copyright />
         </Box>
       </Container>
     </ThemeProvider>

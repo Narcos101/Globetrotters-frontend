@@ -30,6 +30,7 @@ const ChallengeFriend = ({fetchUserData, userData}) => {
         ctx.fillText(`Username: ${data?.username}`, 50, 120);
         ctx.fillText(`Total Correct: ${data?.total_correct_questions}`, 50, 160);
         ctx.fillText(`Total Games: ${data?.total_games_played}`, 50, 200);
+        ctx.fillText(`Best Score: ${data?.total_correct_questions*10}`, 50, 240);
 
         // Convert canvas to Blob for sharing
         canvas.toBlob((blob) => {
@@ -38,7 +39,7 @@ const ChallengeFriend = ({fetchUserData, userData}) => {
     };
 
     const handleChallengeFriend = async () => {
-        const shareText = `Hey! I'm playing this game! I got ${userData.total_correct_questions} correct answers in ${userData?.total_games_played} games. Can you beat me?`;
+        const shareText = `Hey! I'm playing this game! I got ${userData.total_correct_questions} correct answers in ${userData?.total_games_played} games. My highest score is ${userData?.total_correct_questions*10} games Can you beat me?`;
         const inviteLink = `https://localhost:3000/register`;
 
         if (navigator.canShare && imageBlob) {

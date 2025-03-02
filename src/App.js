@@ -3,21 +3,19 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import Login from "./components/Login";
 import Register from "./components/Registration";
 import Dashboard from "./components/Dashboard";
-import InvitePage from "./components/InvitePage";
 
 function PrivateRoute({ element }) {
   const isAuthenticated = localStorage.getItem("token");
-  return isAuthenticated ? element : <Navigate to="/" />;
+  return isAuthenticated ? element : <Navigate to="/login" />;
 }
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
-        <Route path="/join/:userId" element={<InvitePage />} />
+        <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />
       </Routes>
     </Router>
   );

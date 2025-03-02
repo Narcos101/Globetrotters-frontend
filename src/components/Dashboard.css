@@ -15,7 +15,6 @@
 
 /* 🎮 Welcome Header */
 .dashboard-container h2 {
-  color: #00ffea;
   font-size: 26px;
   text-shadow: 0 0 10px #00ffea, 0 0 20px #00b3b3;
 }
@@ -32,6 +31,23 @@
   transition: all 0.3s ease-in-out;
   text-transform: uppercase;
   box-shadow: 0 0 10px #ff4500, 0 0 20px #ff00ff;
+}
+
+/* 🚀 Start Game Button */
+.exit-game-btn {
+  background: linear-gradient(45deg, #ff00ff, #ff4500);
+  color: white;
+  font-size: 14px; /* Further reduced font size */
+  padding: 8px 14px; /* Smaller padding */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px #ff4500, 0 0 20px #ff00ff;
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 .start-game-btn:hover, .challenge-btn:hover {

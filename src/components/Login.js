@@ -15,18 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export default function SignIn() {
 
@@ -36,9 +25,9 @@ export default function SignIn() {
   
     const handleLogin = async () => {
       try {
-        const res = await axios.post("http://localhost:5000/login", { username, password });
+        const res = await axios.post(`${API_BASE_URL}/login`, { username, password });
         localStorage.setItem("token", res.data.token);
-        navigate("/dashboard");
+        navigate("/");
       } catch (error) {
         alert("Invalid credentials");
       }
@@ -102,9 +91,6 @@ export default function SignIn() {
               </Grid>
             </Grid>
           </Box>
-        </Box>
-        <Box mt={8}>
-          <Copyright />
         </Box>
       </Container>
     </ThemeProvider>
