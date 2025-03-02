@@ -1,5 +1,19 @@
 # Destination Trivia Game
 
+## Images 
+### Sign In
+![Sign In](images/SignIn.png)<br><br>
+### Incorrect Answer
+![Incorrect Answer](images/IncorrectAnswer.png)<br><br>
+### Correct Answer
+![Correct Answer](images/CorrectAnswer.png)<br><br>
+### Whatsapp feature
+![Whatsapp feature](images/whatsappfeature.jpeg)<br><br>
+### Mobile View
+![Mobile View](images/mobileview.jpeg)<br><br>
+
+
+
 ## Overview
 
 This project is a React + Flask web application that offers an engaging and fun destination-based trivia game. The game challenges users with clues and fun facts about destinations worldwide and lets them guess the correct answer. It includes dynamic features such as animations, score tracking, strict authentication, and a unique 'Challenge a Friend' option.
@@ -78,22 +92,13 @@ This project is a React + Flask web application that offers an engaging and fun 
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/yourusername/destination-trivia-game.git
-cd destination-trivia-game
-```
-
-2. **Backend Setup:**
-
-```bash
-cd backend
-pip install -r requirements.txt
-flask run
-```
-
-3. **Frontend Setup:**
-
-```bash
+git clone https://github.com/Narcos101/Globetrotters-frontend.git
 cd frontend
+```
+
+2. **Frontend Setup:**
+
+```bash
 npm install
 npm start
 ```
