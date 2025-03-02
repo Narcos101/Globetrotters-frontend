@@ -61,9 +61,6 @@ const ChallengeFriend = () => {
     const handleChallengeFriend = async () => {
         const shareText = `Hey! I'm playing this game! I got ${userData.total_correct_questions} correct answers in ${userData?.total_games_played} games. My highest score is ${userData?.total_correct_questions*10} points. Can you beat me?`;
         const inviteLink = `${APP_BASE_URL}/register`;
-
-        const file = new File([imageBlob], "globetrotters.png", { type: "image/png" });
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareText + " " + inviteLink)}`, "_blank");
         if (navigator.canShare && imageBlob) {
             const file = new File([imageBlob], "globetrotters.png", { type: "image/png" });
 

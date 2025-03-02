@@ -74,6 +74,12 @@ function Dashboard() {
     };
 
     const fetchQuestion = async (session_id) => {
+        window.requestAnimationFrame(() => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+        });
         setLoading(true);
         setShowNextButton(false);
         setShowResult(false);
@@ -123,6 +129,14 @@ function Dashboard() {
             setShowNextButton(true);
             setShowResult(true);
             setScore(data['correct_questions']*10)
+
+            window.requestAnimationFrame(() => {
+                window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: "smooth",
+                });
+            });
+
         } catch (error) {
             console.error("Network error:", error);
         }
@@ -157,11 +171,21 @@ function Dashboard() {
                         ))}
                     </ul>
                     <ul className="option-list">
-                        {questionData.hint_destinations.map((option, index) => (
+                        {questionData.hint_destinations.map((option, index) => (            
                             <li
                                 key={index}
                                 onClick={() => handleOptionClick(option, questionData.uuid)}
-                                style={{ cursor: result ? "not-allowed" : "pointer", opacity: result ? 0.5 : 1, pointerEvents: result ? "none" : "auto" }}
+                                style={{ cursor: result ? "not-allowed" : "pointer", opacity: result ? 0.5 : 1, pointerEvents: result ? "none" : "auto",backgroundColor: result
+                                    ? option === result?.updated_round.correctOption && option === result?.updated_round.selectedOption
+                                        ? "green" // Correct option selected
+                                        : option === result?.updated_round.selectedOption
+                                        ? "red" // Incorrect option selected
+                                        : option === result?.updated_round.correctOption
+                                        ? "lightgreen" // Highlight the correct option if a wrong option was selected
+                                        : "transparent" // Default transparent for all other options
+                                    : "transparent",
+                                color: result ? "#fff" : "#000",
+                                transition: "background-color 0.3s"}}
                             >
                                 {option}
                             </li>
