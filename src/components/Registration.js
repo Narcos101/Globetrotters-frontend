@@ -29,7 +29,16 @@ export default function SignUp() {
     const handleRegister = async () => {
         try {
           
-          await axios.post(`${API_BASE_URL}/register`, { username, password });
+          await axios.post(`${API_BASE_URL}/register`, 
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*", // Ideally, specify your frontend domain instead of "*"
+              },
+              withCredentials: true, // Only needed if your backend uses cookies or session authentication
+            },
+            
+            { username, password });
           alert("Registration successful! Please login.");
           navigate("/");
         } catch (error) {
