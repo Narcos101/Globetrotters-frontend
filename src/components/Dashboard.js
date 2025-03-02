@@ -12,6 +12,7 @@ function Dashboard() {
     const [showNextButton, setShowNextButton] = useState(false);
     const [result, setResult] = useState(false);
     const [showResult, setShowResult] = useState(false);
+    const [score, setScore] = useState(0);
     const [userData, setUserData] = useState({
         username: "...",
         total_correct_questions: 0,
@@ -43,7 +44,7 @@ function Dashboard() {
         localStorage.removeItem("sessionId");
         window.location.reload();
     };
-    
+
 
     const handle_start_game = async () => {
         setLoading(true);
@@ -118,9 +119,10 @@ function Dashboard() {
             });
 
             const data = await response.json();
-            setResult(data);    
+            setResult(data);
             setShowNextButton(true);
             setShowResult(true);
+            setScore(data['correct_questions']*10)
         } catch (error) {
             console.error("Network error:", error);
         }
@@ -128,9 +130,10 @@ function Dashboard() {
 
     return (
         <div className="dashboard-container">
-            <h2>Welcome, {userData?.username} !</h2>
+
             {!sessionId ? (
                 <>
+                    <h2>Welcome, {userData?.username} !</h2><br />
                     <button className="start-game-btn" onClick={handle_start_game}>
                         Start the game
                     </button>
@@ -141,10 +144,11 @@ function Dashboard() {
                 <p className="loading-text">Loading question...</p>
             ) : questionData ? (
                 <div className="question-container">
-                                <button className="exit-game-btn" onClick={handle_exit_game}>
-                Exit
-            </button>
-                    Clues for you: 
+                    <button className="exit-game-btn" onClick={handle_exit_game}>
+                        Exit
+                    </button>
+                    <h2>Round {questionData?.roundno} | Score - {score}</h2>
+                    Clues for you:
                     <ul style={{ listStyleType: "none", padding: 0 }}>
                         {questionData.answer_destination.map((clue, index) => (
                             <li key={index} style={{ marginBottom: "5px" }}>
