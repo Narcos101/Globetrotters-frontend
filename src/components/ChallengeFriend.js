@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const APP_BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const ChallengeFriend = () => {
     const [imageBlob, setImageBlob] = useState(null);
@@ -20,6 +21,7 @@ const ChallengeFriend = () => {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             const data = await response.json();
+            setUserData(data);
             generateInviteImage(data);
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -57,11 +59,13 @@ const ChallengeFriend = () => {
     };
 
     const handleChallengeFriend = async () => {
-        const shareText = `Hey! I'm playing this game! I got ${userData.total_correct_questions} correct answers in ${userData?.total_games_played} games. My highest score is ${userData?.total_correct_questions*10} games Can you beat me?`;
-        const inviteLink = `https://localhost:3000/register`;
+        const shareText = `Hey! I'm playing this game! I got ${userData.total_correct_questions} correct answers in ${userData?.total_games_played} games. My highest score is ${userData?.total_correct_questions*10} points. Can you beat me?`;
+        const inviteLink = `${process.env.APP_BASE_URL}/register`;
 
+        const file = new File([imageBlob], "globetrotters.png", { type: "image/png" });
+        window.open(`https://wa.me/?text=${encodeURIComponent(shareText + " " + inviteLink)}`, "_blank");
         if (navigator.canShare && imageBlob) {
-            const file = new File([imageBlob], "invite.png", { type: "image/png" });
+            const file = new File([imageBlob], "globetrotters.png", { type: "image/png" });
 
             if (navigator.share) {
                 try {
@@ -77,9 +81,6 @@ const ChallengeFriend = () => {
                 }
             }
         }
-
-        // Fallback for WhatsApp Web (Text only, since it doesn’t support image sharing via URL)
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareText + " " + inviteLink)}`, "_blank");
     };
 
     return (
