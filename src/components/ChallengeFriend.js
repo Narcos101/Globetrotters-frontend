@@ -9,6 +9,7 @@ const ChallengeFriend = ({fetchUserData, userData}) => {
     }, []);
 
     const generateInviteImage = async (data) => {
+        console.log(data);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const width = 600;
